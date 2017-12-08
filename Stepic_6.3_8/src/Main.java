@@ -1,4 +1,3 @@
-
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -13,6 +12,7 @@ public class Main {
         Function<Object, Integer> ifTrue = obj -> 0; //функция всегда возвращает 0, независимо от аргумента
         Function<CharSequence, Integer> ifFalse = CharSequence::length; //возвращает длину CharSequence
         Function<String, Integer> safeStringLength = ternaryOperator(condition, ifTrue, ifFalse);
+        System.out.println(safeStringLength);
 
     }
 
@@ -20,10 +20,25 @@ public class Main {
             Predicate<? super T> condition,
             Function<? super T, ? extends U> ifTrue,
             Function<? super T, ? extends U> ifFalse) {
-        //(некое_условие) ? (если true, то делаем это) : (если false, то делаем это).
-        //T -> (condition(t)) ? (ifTrue.apply(t)) : (ifFalse.apply(t))
 
-        return (T t) -> (condition.test(t)) ? (ifTrue.apply(t)) : (ifFalse.apply(t)); // your implementation here
+       /* Function<T, U> myFunct = new Function<T, U>() {
+            @Override
+            public U apply(T t) {
+                return  condition.test(t) ?  ifTrue.apply(t): ifFalse.apply(t);
+            }
+        };
+        return myFunct;*/
+
+
+        return new Function<T, U>() {
+            @Override
+            public U apply(T t) {
+                return  condition.test(t) ?  ifTrue.apply(t): ifFalse.apply(t);
+            }
+        };
+
+        // t - Экземпляр Function, т.к. Function функ. интерфейс мы можем его инстанцировать блаодоря лямбда выражению
+        //return t -> (condition.test(t)) ? (ifTrue.apply(t)) : (ifFalse.apply(t)); // your implementation here
 
     }
 }
